@@ -1,13 +1,11 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllNewComicReader64bit", "AllNewComicReader\AllNewComicReader64bit.csproj", "{30EBC9F2-B4CB-4746-A021-87CE156FE8CE}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllNewComicReader", "AllNewComicReader\AllNewComicReader.csproj", "{30EBC9F2-B4CB-4746-A021-87CE156FE8CE}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AllNewComicThumbnailHandler", "ComicThumbnailHandler\CppShellExtThumbnailHandler.vcxproj", "{145AB33E-71A1-42C3-8223-E107CFC162F4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllNewComicReader32bit", "AllNewComicReader\AllNewComicReader32bit.csproj", "{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}"
-EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "AllNewComicReaderSetup", "AllNewComicReaderSetup\AllNewComicReaderSetup.wixproj", "{ADB38CA7-41D7-4394-9BF5-D56691F912A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,47 +64,11 @@ Global
 		{145AB33E-71A1-42C3-8223-E107CFC162F4}.Release|Mixed Platforms.Build.0 = Release|x64
 		{145AB33E-71A1-42C3-8223-E107CFC162F4}.Release|x64.ActiveCfg = Release|Win32
 		{145AB33E-71A1-42C3-8223-E107CFC162F4}.Release|x86.ActiveCfg = Release|Win32
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Debug|Mixed Platforms.Build.0 = Debug|x64
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Debug|x64.ActiveCfg = Debug|x86
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Debug|x86.ActiveCfg = Debug|x86
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Debug|x86.Build.0 = Debug|x86
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Deploy|Any CPU.ActiveCfg = Deploy|Any CPU
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Deploy|Any CPU.Build.0 = Deploy|Any CPU
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Deploy|Mixed Platforms.ActiveCfg = Deploy|x64
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Deploy|Mixed Platforms.Build.0 = Deploy|x64
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Deploy|x64.ActiveCfg = Deploy|x86
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Deploy|x86.ActiveCfg = Deploy|x86
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Deploy|x86.Build.0 = Deploy|x86
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Release|Mixed Platforms.ActiveCfg = Release|x64
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Release|Mixed Platforms.Build.0 = Release|x64
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Release|x64.ActiveCfg = Release|x86
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Release|x86.ActiveCfg = Release|x86
-		{1AE59CFB-7391-47FF-84B6-F84FA9597EA6}.Release|x86.Build.0 = Release|x86
-		{ADB38CA7-41D7-4394-9BF5-D56691F912A6}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{ADB38CA7-41D7-4394-9BF5-D56691F912A6}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{ADB38CA7-41D7-4394-9BF5-D56691F912A6}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{ADB38CA7-41D7-4394-9BF5-D56691F912A6}.Debug|x64.ActiveCfg = Debug|x86
-		{ADB38CA7-41D7-4394-9BF5-D56691F912A6}.Debug|x86.ActiveCfg = Debug|x86
-		{ADB38CA7-41D7-4394-9BF5-D56691F912A6}.Debug|x86.Build.0 = Debug|x86
-		{ADB38CA7-41D7-4394-9BF5-D56691F912A6}.Deploy|Any CPU.ActiveCfg = Debug|x86
-		{ADB38CA7-41D7-4394-9BF5-D56691F912A6}.Deploy|Mixed Platforms.ActiveCfg = Debug|x86
-		{ADB38CA7-41D7-4394-9BF5-D56691F912A6}.Deploy|Mixed Platforms.Build.0 = Debug|x86
-		{ADB38CA7-41D7-4394-9BF5-D56691F912A6}.Deploy|x64.ActiveCfg = Debug|x86
-		{ADB38CA7-41D7-4394-9BF5-D56691F912A6}.Deploy|x86.ActiveCfg = Debug|x86
-		{ADB38CA7-41D7-4394-9BF5-D56691F912A6}.Deploy|x86.Build.0 = Debug|x86
-		{ADB38CA7-41D7-4394-9BF5-D56691F912A6}.Release|Any CPU.ActiveCfg = Release|x86
-		{ADB38CA7-41D7-4394-9BF5-D56691F912A6}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{ADB38CA7-41D7-4394-9BF5-D56691F912A6}.Release|Mixed Platforms.Build.0 = Release|x86
-		{ADB38CA7-41D7-4394-9BF5-D56691F912A6}.Release|x64.ActiveCfg = Release|x86
-		{ADB38CA7-41D7-4394-9BF5-D56691F912A6}.Release|x86.ActiveCfg = Release|x86
-		{ADB38CA7-41D7-4394-9BF5-D56691F912A6}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {53C9F334-F8BA-4E6A-BB87-D47E6E038B6A}
 	EndGlobalSection
 EndGlobal
