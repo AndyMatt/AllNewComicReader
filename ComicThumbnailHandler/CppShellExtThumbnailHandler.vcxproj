@@ -1,0 +1,299 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="32bit Release|Win32">
+      <Configuration>32bit Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="32bit Release|x64">
+      <Configuration>32bit Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{145AB33E-71A1-42C3-8223-E107CFC162F4}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>CppShellExtThumbnailHandler</RootNamespace>
+    <ProjectName>AllNewComicThumbnailHandler</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\.\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;CPPSHELLEXTTHUMBNAILHANDLER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Andrew\Documents\Visual Studio 2010\Projects\AllNewComicReader\ComicThumbnailHandler;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ModuleDefinitionFile>GlobalExportFunctions.def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;CPPSHELLEXTTHUMBNAILHANDLER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Andrew\Documents\Visual Studio 2010\Projects\AllNewComicReader\ComicThumbnailHandler;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ModuleDefinitionFile>GlobalExportFunctions.def</ModuleDefinitionFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;CPPSHELLEXTTHUMBNAILHANDLER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Andrew\All New Comic Reader\C%252b%252b Windows Shell thumbnail handler %28CppShellExtThumbnailHandler%29\C++\CppShellExtThumbnailHandler;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ModuleDefinitionFile>GlobalExportFunctions.def</ModuleDefinitionFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;CPPSHELLEXTTHUMBNAILHANDLER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Andrew\All New Comic Reader\C%252b%252b Windows Shell thumbnail handler %28CppShellExtThumbnailHandler%29\C++\CppShellExtThumbnailHandler;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ModuleDefinitionFile>GlobalExportFunctions.def</ModuleDefinitionFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="7z_C\7zC.txt" />
+    <None Include="7z_C\lzma.txt" />
+    <None Include="7z_C\readme.txt" />
+    <None Include="chocolatechipcookies.recipe">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="file.ico" />
+    <None Include="RecipeThumbnailProvider.h" />
+    <None Include="GlobalExportFunctions.def" />
+    <None Include="ReadMe.txt" />
+    <None Include="unrar\changes.txt" />
+    <None Include="unrar\license.txt" />
+    <None Include="unrar\readme.txt" />
+    <None Include="unrar\technote.txt" />
+    <None Include="unrar\whatsnew.txt" />
+    <None Include="zlib\readme.txt" />
+    <None Include="zlib\zlib.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Documents\visual studio 2010\Projects\HandleTest\HandleTest\targetver.h" />
+    <ClInclude Include="7z_C\7zAlloc.h" />
+    <ClInclude Include="7z_C\7zBuf.h" />
+    <ClInclude Include="7z_C\7zCrc.h" />
+    <ClInclude Include="7z_C\7zDecode.h" />
+    <ClInclude Include="7z_C\7zExtract.h" />
+    <ClInclude Include="7z_C\7zHeader.h" />
+    <ClInclude Include="7z_C\7zIn.h" />
+    <ClInclude Include="7z_C\7zItem.h" />
+    <ClInclude Include="7z_C\Bcj2.h" />
+    <ClInclude Include="7z_C\Bra.h" />
+    <ClInclude Include="7z_C\CpuArch.h" />
+    <ClInclude Include="7z_C\LzmaDec.h" />
+    <ClInclude Include="7z_C\Types.h" />
+    <ClInclude Include="ClassFactory.h" />
+    <ClInclude Include="fex\Binary_Extractor.h" />
+    <ClInclude Include="fex\blargg_common.h" />
+    <ClInclude Include="fex\blargg_config.h" />
+    <ClInclude Include="fex\blargg_endian.h" />
+    <ClInclude Include="fex\blargg_errors.h" />
+    <ClInclude Include="fex\blargg_source.h" />
+    <ClInclude Include="fex\Data_Reader.h" />
+    <ClInclude Include="fex\fex.h" />
+    <ClInclude Include="fex\File_Extractor.h" />
+    <ClInclude Include="fex\Gzip_Extractor.h" />
+    <ClInclude Include="fex\Gzip_Reader.h" />
+    <ClInclude Include="fex\Rar_Extractor.h" />
+    <ClInclude Include="fex\Zip7_Extractor.h" />
+    <ClInclude Include="fex\Zip_Extractor.h" />
+    <ClInclude Include="fex\Zlib_Inflater.h" />
+    <ClInclude Include="Reg.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
+    <ClInclude Include="resource2.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="unrar\archive.hpp" />
+    <ClInclude Include="unrar\array.hpp" />
+    <ClInclude Include="unrar\coder.hpp" />
+    <ClInclude Include="unrar\compress.hpp" />
+    <ClInclude Include="unrar\encname.hpp" />
+    <ClInclude Include="unrar\getbits.hpp" />
+    <ClInclude Include="unrar\headers.hpp" />
+    <ClInclude Include="unrar\model.hpp" />
+    <ClInclude Include="unrar\rar.hpp" />
+    <ClInclude Include="unrar\rarvm.hpp" />
+    <ClInclude Include="unrar\rawread.hpp" />
+    <ClInclude Include="unrar\suballoc.hpp" />
+    <ClInclude Include="unrar\unicode.hpp" />
+    <ClInclude Include="unrar\unpack.hpp" />
+    <ClInclude Include="unrar\unrar.h" />
+    <ClInclude Include="zlib\crc32.h" />
+    <ClInclude Include="zlib\inffast.h" />
+    <ClInclude Include="zlib\inffixed.h" />
+    <ClInclude Include="zlib\inflate.h" />
+    <ClInclude Include="zlib\inftrees.h" />
+    <ClInclude Include="zlib\zconf.h" />
+    <ClInclude Include="zlib\zlib.h" />
+    <ClInclude Include="zlib\zutil.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="7z_C\7zAlloc.c" />
+    <ClCompile Include="7z_C\7zBuf.c" />
+    <ClCompile Include="7z_C\7zCrc.c" />
+    <ClCompile Include="7z_C\7zDecode.c" />
+    <ClCompile Include="7z_C\7zExtract.c" />
+    <ClCompile Include="7z_C\7zHeader.c" />
+    <ClCompile Include="7z_C\7zIn.c" />
+    <ClCompile Include="7z_C\7zItem.c" />
+    <ClCompile Include="7z_C\7zStream.c" />
+    <ClCompile Include="7z_C\Bcj2.c" />
+    <ClCompile Include="7z_C\Bra86.c" />
+    <ClCompile Include="7z_C\LzmaDec.c" />
+    <ClCompile Include="ClassFactory.cpp" />
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="fex\Binary_Extractor.cpp" />
+    <ClCompile Include="fex\blargg_common.cpp" />
+    <ClCompile Include="fex\blargg_errors.cpp" />
+    <ClCompile Include="fex\Data_Reader.cpp" />
+    <ClCompile Include="fex\fex.cpp" />
+    <ClCompile Include="fex\File_Extractor.cpp" />
+    <ClCompile Include="fex\Gzip_Extractor.cpp" />
+    <ClCompile Include="fex\Gzip_Reader.cpp" />
+    <ClCompile Include="fex\Rar_Extractor.cpp" />
+    <ClCompile Include="fex\Zip7_Extractor.cpp" />
+    <ClCompile Include="fex\Zip_Extractor.cpp" />
+    <ClCompile Include="fex\Zlib_Inflater.cpp" />
+    <ClCompile Include="RecipeThumbnailProvider.cpp" />
+    <ClCompile Include="Reg.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="unrar\archive.cpp" />
+    <ClCompile Include="unrar\arcread.cpp" />
+    <ClCompile Include="unrar\coder.cpp" />
+    <ClCompile Include="unrar\crc.cpp" />
+    <ClCompile Include="unrar\encname.cpp" />
+    <ClCompile Include="unrar\extract.cpp" />
+    <ClCompile Include="unrar\getbits.cpp" />
+    <ClCompile Include="unrar\model.cpp" />
+    <ClCompile Include="unrar\rarvm.cpp" />
+    <ClCompile Include="unrar\rarvmtbl.cpp" />
+    <ClCompile Include="unrar\rawread.cpp" />
+    <ClCompile Include="unrar\suballoc.cpp" />
+    <ClCompile Include="unrar\unicode.cpp" />
+    <ClCompile Include="unrar\unpack.cpp" />
+    <ClCompile Include="unrar\unpack15.cpp" />
+    <ClCompile Include="unrar\unpack20.cpp" />
+    <ClCompile Include="unrar\unrar.cpp" />
+    <ClCompile Include="unrar\unrar_misc.cpp" />
+    <ClCompile Include="unrar\unrar_open.cpp" />
+    <ClCompile Include="zlib\adler32.c" />
+    <ClCompile Include="zlib\crc32.c" />
+    <ClCompile Include="zlib\inffast.c" />
+    <ClCompile Include="zlib\inflate.c" />
+    <ClCompile Include="zlib\inftrees.c" />
+    <ClCompile Include="zlib\zutil.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CppShellExtThumbnailHandler.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

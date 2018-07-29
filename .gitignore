@@ -1,0 +1,5 @@
+AllNewComicReader/bin/*
+AllNewComicReader/obj/*
+*.suo
+*.csproj
+*.vcxproj.user
