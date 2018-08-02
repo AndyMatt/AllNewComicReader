@@ -122,11 +122,11 @@ namespace AllNewComicReader
             return (Math.Sign(byteCount) * num).ToString() + suf[place];
         }
 
-        void SetInfo()
+        void SetInfo(int FileSize)
         {
             ImageInfo = Comp.GetFileName() + "@n";
             ImageInfo += "Resolution: " + image.Width + "x" + image.Height + "@n";
-            ImageInfo += "Size: " + BytesToString(image.FileSize) + "@n";
+            ImageInfo += "Size: " + BytesToString(FileSize) + "@n";
             ImageInfo += "Format: " + image.Depth + "-bit " + image.Format.ToString().ToUpper() + "@n";
             ImageInfo += "Density: " + image.Width + "@n";
         }
@@ -143,11 +143,13 @@ namespace AllNewComicReader
                 if (Properties.Settings.Default.PageContolPopup)
                     UserControlPopup.Setup("Previous Page");
 
-                image = new MagickImage(Comp.ExtractPrevFile());
+                byte[] byteStream = Comp.ExtractPrevFile();
+
+                image = new MagickImage(byteStream);
 
                 Originalimage = new MagickImage(image);
 
-                SetInfo();
+                SetInfo(byteStream.Length * sizeof(byte));
 
                 TextAlpha = 1000;
                 Properties.Settings.Default.ImageInfoOpacity = 1.0f;
@@ -187,12 +189,13 @@ namespace AllNewComicReader
 
         public void GotoPage(uint PageNumber)
         {
+            byte[] byteStream = Comp.GetPage(PageNumber);
 
-            image = new MagickImage(Comp.GetPage(PageNumber));
+            image = new MagickImage(byteStream);
 
             Originalimage = new MagickImage(image);
 
-            SetInfo();
+            SetInfo(byteStream.Length * sizeof(byte));
 
             SetupImage();
         }
@@ -212,11 +215,13 @@ namespace AllNewComicReader
                 if (Properties.Settings.Default.PageContolPopup)
                     UserControlPopup.Setup("First Page");
 
-                image = new MagickImage(Comp.GetFirstFile());
+                byte[] byteStream = Comp.GetFirstFile();
+
+                image = new MagickImage(byteStream);
 
                 Originalimage = new MagickImage(image);
 
-                SetInfo();
+                SetInfo(byteStream.Length * sizeof(byte));
 
                 TextAlpha = 1000;
                 Properties.Settings.Default.ImageInfoOpacity = 1.0f;
@@ -233,9 +238,13 @@ namespace AllNewComicReader
                 if (Properties.Settings.Default.PageContolPopup)
                     UserControlPopup.Setup("Last Page");
 
-                image = new MagickImage(Comp.GetLastFile());
+                byte[] byteStream = Comp.GetLastFile();
+
+                image = new MagickImage(byteStream);
                 Comp.iCurrentDoublePage = Comp.iCurrentPage;
-                SetInfo();
+
+                SetInfo(byteStream.Length * sizeof(byte));
+
                 Originalimage = new MagickImage(image);
                 bDoubleDisplay = false;
 
@@ -276,16 +285,18 @@ namespace AllNewComicReader
                 //Main Function for Worker
                 Loader.DoWork += delegate(object s, DoWorkEventArgs args)
                 {
-                    image = new MagickImage(Comp.ExtractNextFile());
+                    byte[] byteStream = Comp.ExtractNextFile();
+
+                    image = new MagickImage(byteStream);
 
                 //image = images[imagepos++];
                 //stop1.Stop();
 
-                Comp.iCurrentDoublePage = Comp.iCurrentPage;
-                SetInfo();
+                    Comp.iCurrentDoublePage = Comp.iCurrentPage;
+                
+                    SetInfo(byteStream.Length * sizeof(byte));
 
-
-                Originalimage = new MagickImage(image);
+                    Originalimage = new MagickImage(image);
                 };
 
                 //Runs after Worker has finished
@@ -429,7 +440,7 @@ namespace AllNewComicReader
             //sampleimage = new MagickImage("test.bmp");
             //Newfile.Close();
             //image.Equalize();
-            PixelCollection pixels = sampleimage.GetPixels();
+            IPixelCollection pixels = sampleimage.GetPixels();
 
             Pixel WhiteThreshold = pixels.GetPixel(0,0);
 
