@@ -1,1 +1,1 @@
-C:\Users\Andrew\Documents\Visual Studio 2010\Projects\AllNewComicReader\AllNewComicReader\Icons\file.ico
+file.ico
