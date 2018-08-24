@@ -63,7 +63,7 @@
             this.menuItem5 = new System.Windows.Forms.MenuItem();
             this.menuItemAbout = new System.Windows.Forms.MenuItem();
             this.InputControl = new System.Windows.Forms.Panel();
-            this.customInfoBox1 = new AllNewComicReader.CustomInfoBox();
+            this.customInfoBox1 = CustomInfoBox.Instance;
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.InputControl.SuspendLayout();
             this.SuspendLayout();

@@ -11,14 +11,28 @@ namespace AllNewComicReader
 {
     public partial class CustomInfoBox : Panel
     {
+        private static CustomInfoBox instance = null;
+
+        public static CustomInfoBox Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new CustomInfoBox();
+                }
+
+                return instance;
+            }
+        }
         private Color colorBorder = Color.Red;
-        public string stringText = "";
-        public float Opacity = 0.0f;
+        private string stringText = "";
+        private float Opacity = 0.0f;
         public int BackOpacty = 200;
         int OpacityBuffer = 200;
         public bool Active;
 
-        public CustomInfoBox()
+        private CustomInfoBox()
             : base()
         {
             Active = false;
