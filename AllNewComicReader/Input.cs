@@ -208,6 +208,9 @@ namespace AllNewComicReader
 
         public void Input_KeyDown(object sender, KeyEventArgs e)
         {
+            if (ImageEngine.IsLoading)
+               return;
+
             if (CheckInput(e, settings.InputScrollDown))
                 bDownKey = true;
 
