@@ -37,14 +37,16 @@ namespace AllNewComicReader
 
     class ImageEngine
     {
+        public static bool IsLoading;
 
-    private delegate void RefreshSizeDelegate();
-    private RefreshSizeDelegate async;
 
-    List<ImageMagick.MagickImage> images;
+        private delegate void RefreshSizeDelegate();
+        private RefreshSizeDelegate async;
 
-    public int TextAlpha = 1500;
-    int imagepos = 1;
+        List<ImageMagick.MagickImage> images;
+
+        public int TextAlpha = 1500;
+        int imagepos = 1;
 
         Size ClientSize;
         public ViewSetting pImageView;
@@ -83,6 +85,7 @@ namespace AllNewComicReader
 
         public float MousePrevPageCounter;
         public float MouseNextPageCounter;
+
 
         //MagickImageCollection AnimatedFrames;
 
@@ -276,15 +279,20 @@ namespace AllNewComicReader
         {
             if (!CheckLastPage())
             {
-
+                Console.Out.WriteLine("NextPage");
                 ClearHUD();
+                CustomInfoBox.Instance.Hide();
                 UserControlPopup.Loading();
 
+                IsLoading = true;
+                //Main Function f
                 BackgroundWorker Loader = new BackgroundWorker();
 
-                //Main Function for Worker
+
                 Loader.DoWork += delegate(object s, DoWorkEventArgs args)
                 {
+                    Properties.Settings.Default.ImageInfoOpacity = 0.0f;
+
                     byte[] byteStream = Comp.ExtractNextFile();
 
                     image = new MagickImage(byteStream);
@@ -303,6 +311,7 @@ namespace AllNewComicReader
                 Loader.RunWorkerCompleted += delegate(object s, RunWorkerCompletedEventArgs args)
                 {
                     UserControlPopup.Loaded();
+                    IsLoading = false;
                     TextAlpha = 1000;
                     Properties.Settings.Default.ImageInfoOpacity = 1.0f;
                     Properties.Settings.Default.ImageInfoBuffer = 200;
@@ -325,7 +334,95 @@ namespace AllNewComicReader
             }
         }
 
+        public void NextDoubleImage()
+        {
 
+            if (!CheckLastPage())
+            {
+                Console.Out.WriteLine("NextPage");
+                ClearHUD();
+                CustomInfoBox.Instance.Hide();
+                UserControlPopup.Loading();
+
+                IsLoading = true;
+                //Main Function f
+                BackgroundWorker Loader = new BackgroundWorker();
+
+
+                Loader.DoWork += delegate (object s, DoWorkEventArgs args)
+                {
+                    byte[] byteStream = Comp.ExtractNextFile();
+                    image = new MagickImage(byteStream);
+
+                    if (Comp.iCurrentPage + 1 < Comp.TotalPages)
+                    {
+                        byte[] byteStreamDouble = Comp.ExtractNextDoubleFile();
+
+                        MagickImage image2 = new MagickImage(byteStreamDouble);
+
+                        if (!IsNativeDoublePage(image) && !IsNativeDoublePage(image2))
+                        {
+                          //  int FirstWidth = image.Width;
+                            image.Crop(image.Width + image2.Width, image.Height);
+                            image.Composite(image2, image.Width/2, 0);
+
+                            //MagickImage Merged = new MagickImage(new MagickColor(Color.Black), image.Width + image2.Width, image.Height);
+
+                            //Merged.Composite(image, 0, 0);
+
+                            //image = Merged;
+                        }
+                        else
+                            Comp.iCurrentDoublePage--;
+
+                        Originalimage = new MagickImage(image);
+                        bDoubleDisplay = true;
+                    }
+                    else
+                    {
+                        Comp.iCurrentDoublePage = Comp.iCurrentPage;
+                        bDoubleDisplay = false;
+                        Originalimage = new MagickImage(image);
+                    }
+
+
+
+                    //image = new MagickImage(byteStream);
+
+                    //image = images[imagepos++];
+                    //stop1.Stop();
+
+                    //Comp.iCurrentDoublePage = Comp.iCurrentPage;
+                    //
+                    SetInfo(byteStream.Length * sizeof(byte));
+
+                    //Originalimage = new MagickImage(image);
+                };
+
+                //Runs after Worker has finished
+                Loader.RunWorkerCompleted += delegate (object s, RunWorkerCompletedEventArgs args)
+                {
+                    UserControlPopup.Loaded();
+                    IsLoading = false;
+                    TextAlpha = 1000;
+                    Properties.Settings.Default.ImageInfoOpacity = 1.0f;
+                    Properties.Settings.Default.ImageInfoBuffer = 200;
+                    if (Properties.Settings.Default.PageContolPopup)
+                        UserControlPopup.Setup("Next Page");
+
+                    //bDoubleDisplay = false;
+                    SetupImage();
+                };
+
+                //Start new Worker (Thread)
+                Loader.RunWorkerAsync();
+
+
+                //Stopwatch stop1 = new Stopwatch();
+                //stop1.Start();
+
+            }
+        }
 
         public void ToggleYellow()
         {
@@ -828,39 +925,6 @@ namespace AllNewComicReader
             }
             else
             {
-                bDoubleDisplay = false;
-                Originalimage = new MagickImage(image);
-            }
-
-            SetupImage();
-        }
-
-        public void NextDoubleImage()
-        {
-            image = new MagickImage(Comp.ExtractNextFile());
-
-            if (Comp.iCurrentPage + 1 < Comp.TotalPages)
-            {
-                MagickImage image2 = new MagickImage(Comp.ExtractNextDoubleFile());
-
-                if (!IsNativeDoublePage(image) && !IsNativeDoublePage(image2))
-                {
-                    MagickImage Merged = new MagickImage(new MagickColor(Color.Black), image.Width + image2.Width, image.Height);
-
-                    Merged.Composite(image, 0, 0);
-                    Merged.Composite(image2, image.Width, 0);
-
-                    image = Merged;
-                }
-                else
-                    Comp.iCurrentDoublePage--;
-                
-                Originalimage = new MagickImage(image);
-                bDoubleDisplay = true;
-            }
-            else
-            {
-                Comp.iCurrentDoublePage = Comp.iCurrentPage;
                 bDoubleDisplay = false;
                 Originalimage = new MagickImage(image);
             }

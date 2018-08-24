@@ -291,7 +291,8 @@ namespace AllNewComicReader
             if (CurrentPosition < iCurrentDoublePage)
             {
                 MemoryStream newfs = new MemoryStream();
-                extractor.ExtractFile(ArchiveSort[iCurrentDoublePage], newfs);
+                SevenZipExtractor Extr = new SevenZipExtractor(ArchiveFilePath);
+                Extr.ExtractFile(ArchiveSort[iCurrentDoublePage], newfs);
 
                 return newfs.ToArray();
             }
