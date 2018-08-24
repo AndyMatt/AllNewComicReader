@@ -14,7 +14,6 @@ namespace AllNewComicReader
         public static string Text;
         public static bool isloading = false;
 
-
         public static void Update()
         {
 
@@ -53,6 +52,9 @@ namespace AllNewComicReader
             OutlineText text = new OutlineText();
             StringFormat strformat = new StringFormat();
 
+            SolidBrush blackbrush = new SolidBrush(Color.FromArgb(155, 0, 0, 0));
+            Rectangle bgRect = new Rectangle(0, 0, Screen.PrimaryScreen.WorkingArea.Width, Screen.PrimaryScreen.WorkingArea.Height);
+
             float referX = 0.0f;
             float referY = 0.0f;
             float referWidth = 0.0f;
@@ -63,10 +65,12 @@ namespace AllNewComicReader
 
 
             if (isloading)
+            {
+                e.Graphics.FillRectangle(blackbrush, bgRect);
                 text.DrawString(e.Graphics, fontFamily, FontStyle.Bold, 17, "Loading...", new Point((ClientSize.Width - (int)referWidth) / 2, (ClientSize.Height - (int)referHeight) / 2), strformat);
+            }
 
-
-           if (Opacity < 1)
+            if (Opacity < 1)
                 return;
 
             int alpha = Opacity;
@@ -89,6 +93,7 @@ namespace AllNewComicReader
                   text.DrawString(e.Graphics, fontFamily, FontStyle.Bold, 17, Text, new Point(ClientSize.Width - (int)referWidth, 1), strformat);
 
             //e.Graphics.DrawString("StringFormat strformat = new StringFormat();", font, Brushes.Black, new Point(ClientSize.Width - (int)stringsize.Width, 1));
+
         }
     }
 
