@@ -53,7 +53,7 @@ namespace AllNewComicReader
             StringFormat strformat = new StringFormat();
 
             SolidBrush blackbrush = new SolidBrush(Color.FromArgb(155, 0, 0, 0));
-            Rectangle bgRect = new Rectangle(0, 0, Screen.PrimaryScreen.WorkingArea.Width, Screen.PrimaryScreen.WorkingArea.Height);
+            Rectangle bgRect = new Rectangle(-5, -5, Screen.PrimaryScreen.Bounds.Width+5, Screen.PrimaryScreen.Bounds.Height+5);
 
             float referX = 0.0f;
             float referY = 0.0f;

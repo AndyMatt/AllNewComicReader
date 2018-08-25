@@ -39,14 +39,9 @@ namespace AllNewComicReader
     {
         public static bool IsLoading;
 
-
         private delegate void RefreshSizeDelegate();
         private RefreshSizeDelegate async;
 
-        List<ImageMagick.MagickImage> images;
-
-        public int TextAlpha = 1500;
-        int imagepos = 1;
 
         Size ClientSize;
         public ViewSetting pImageView;
@@ -66,6 +61,9 @@ namespace AllNewComicReader
 
         int ImageHeight;
         int ImageWidth;
+
+        int ImageUnscaledWidth;
+        int ImageUnscaledHeight; 
 
         //bool animated;
 
@@ -128,46 +126,23 @@ namespace AllNewComicReader
         void SetInfo(int FileSize)
         {
             ImageInfo = Comp.GetFileName() + "@n";
+
+            if (Properties.Settings.Default.DoublePage)
+            ImageInfo += Comp.GetDoublePageFileName() + "@n";
+
             ImageInfo += "Resolution: " + image.Width + "x" + image.Height + "@n";
             ImageInfo += "Size: " + BytesToString(FileSize) + "@n";
             ImageInfo += "Format: " + image.Depth + "-bit " + image.Format.ToString().ToUpper() + "@n";
-            ImageInfo += "Density: " + image.Width + "@n";
-        }
-
-        public void AddFiletoList(byte[] aray)
-        {
-            images.Add(new MagickImage(aray));
-        }
-
-        public void PreviousImage()
-        {
-            if (!CheckFirstPage())
-            {
-                if (Properties.Settings.Default.PageContolPopup)
-                    UserControlPopup.Setup("Previous Page");
-
-                byte[] byteStream = Comp.ExtractPrevFile();
-
-                image = new MagickImage(byteStream);
-
-                Originalimage = new MagickImage(image);
-
-                SetInfo(byteStream.Length * sizeof(byte));
-
-                TextAlpha = 1000;
-                Properties.Settings.Default.ImageInfoOpacity = 1.0f;
-                Properties.Settings.Default.ImageInfoBuffer = 200;
-
-                SetupImage();
-            }
+            ImageInfo += "Density: " + image.Density + "@n";
         }
 
         public void ClearHUD()
         {
             UserControlPopup.clear();
-            TextAlpha = 0;
-            Properties.Settings.Default.ImageInfoOpacity = 0.0f;
-            Properties.Settings.Default.ImageInfoBuffer = 0;
+            PageNumberControl.Hide();
+            //TextAlpha = 0;
+            //Properties.Settings.Default.ImageInfoOpacity = 0.0f;
+            //Properties.Settings.Default.ImageInfoBuffer = 0;
         }
 
         public void SaveOriginalPage()
@@ -203,62 +178,6 @@ namespace AllNewComicReader
             SetupImage();
         }
 
-        public void FirstImage()
-        {
-
-            images = new List<MagickImage>();
-            //List<byte[]> files = Comp.GetAllPages();
-            //for(int i = 0; i < files.Count - 1; i++)
-            //{
-            //    images.Add(new MagickImage(files[i]));
-            //}
-
-            if (!CheckFirstPage())
-            {
-                if (Properties.Settings.Default.PageContolPopup)
-                    UserControlPopup.Setup("First Page");
-
-                byte[] byteStream = Comp.GetFirstFile();
-
-                image = new MagickImage(byteStream);
-
-                Originalimage = new MagickImage(image);
-
-                SetInfo(byteStream.Length * sizeof(byte));
-
-                TextAlpha = 1000;
-                Properties.Settings.Default.ImageInfoOpacity = 1.0f;
-                Properties.Settings.Default.ImageInfoBuffer = 200;
-
-                SetupImage();
-            }
-        }
-
-        public void LastImage()
-        {
-            if (!CheckLastPage())
-            {
-                if (Properties.Settings.Default.PageContolPopup)
-                    UserControlPopup.Setup("Last Page");
-
-                byte[] byteStream = Comp.GetLastFile();
-
-                image = new MagickImage(byteStream);
-                Comp.iCurrentDoublePage = Comp.iCurrentPage;
-
-                SetInfo(byteStream.Length * sizeof(byte));
-
-                Originalimage = new MagickImage(image);
-                bDoubleDisplay = false;
-
-                TextAlpha = 1000;
-                Properties.Settings.Default.ImageInfoOpacity = 1.0f;
-                Properties.Settings.Default.ImageInfoBuffer = 200;
-
-                SetupImage();
-            }
-        }
-
         public bool CheckFirstPage()
         {
             if (Comp.iCurrentPage != 0)
@@ -269,36 +188,114 @@ namespace AllNewComicReader
 
         public bool CheckLastPage()
         {
-            if (Comp.iCurrentPage+1 != Comp.TotalPages)
+            if (Comp.iCurrentPage + 1 != Comp.TotalPages)
                 return false;
 
             return true;
+        }
+
+        public void FirstImageNotAsync()
+        {
+            if (CheckFirstPage())
+                return;
+
+            CustomInfoBox.Hide();
+
+            byte[] byteStream = Comp.GetFirstFile();
+
+            image = new MagickImage(byteStream);
+
+            Comp.iCurrentDoublePage = Comp.iCurrentPage;
+
+            SetInfo(byteStream.Length * sizeof(byte));
+
+            Originalimage = new MagickImage(image);
+
+            bDoubleDisplay = false;
+
+            OnImageLoaded("First Page");
+        }
+
+        public void FirstImage()
+        {
+            if (CheckFirstPage())
+                return;
+
+            OnPreLoadNewImage();
+
+            BackgroundWorker Loader = new BackgroundWorker();
+
+            Loader.DoWork += delegate (object s, DoWorkEventArgs args)
+            {
+                CustomInfoBox.Hide();
+
+                byte[] byteStream = Comp.GetFirstFile();
+
+                image = new MagickImage(byteStream);
+
+                Comp.iCurrentDoublePage = Comp.iCurrentPage;
+
+                SetInfo(byteStream.Length * sizeof(byte));
+
+                Originalimage = new MagickImage(image);
+            };
+
+            Loader.RunWorkerCompleted += delegate (object s, RunWorkerCompletedEventArgs args)
+            {
+                bDoubleDisplay = false;
+
+                OnImageLoaded("First Page");
+            };
+
+            Loader.RunWorkerAsync();
+        }
+       
+
+        public void LastImage()
+        {
+            if (CheckLastPage())
+                return;
+
+            OnPreLoadNewImage();
+
+            BackgroundWorker Loader = new BackgroundWorker();
+
+            Loader.DoWork += delegate (object s, DoWorkEventArgs args)
+            {
+                byte[] byteStream = Comp.GetLastFile();
+
+                image = new MagickImage(byteStream);
+
+                Comp.iCurrentDoublePage = Comp.iCurrentPage;
+
+                SetInfo(byteStream.Length * sizeof(byte));
+
+                Originalimage = new MagickImage(image);
+            };
+
+            Loader.RunWorkerCompleted += delegate (object s, RunWorkerCompletedEventArgs args)
+            {
+                bDoubleDisplay = false;
+
+                OnImageLoaded("Last Page");
+            };
+
+            Loader.RunWorkerAsync();
         }
 
         public void NextImage()
         {
             if (!CheckLastPage())
             {
-                Console.Out.WriteLine("NextPage");
-                ClearHUD();
-                CustomInfoBox.Instance.Hide();
-                UserControlPopup.Loading();
+                OnPreLoadNewImage();
 
-                IsLoading = true;
-                //Main Function f
                 BackgroundWorker Loader = new BackgroundWorker();
-
 
                 Loader.DoWork += delegate(object s, DoWorkEventArgs args)
                 {
-                    Properties.Settings.Default.ImageInfoOpacity = 0.0f;
-
                     byte[] byteStream = Comp.ExtractNextFile();
 
                     image = new MagickImage(byteStream);
-
-                //image = images[imagepos++];
-                //stop1.Stop();
 
                     Comp.iCurrentDoublePage = Comp.iCurrentPage;
                 
@@ -307,121 +304,183 @@ namespace AllNewComicReader
                     Originalimage = new MagickImage(image);
                 };
 
-                //Runs after Worker has finished
                 Loader.RunWorkerCompleted += delegate(object s, RunWorkerCompletedEventArgs args)
                 {
-                    UserControlPopup.Loaded();
-                    IsLoading = false;
-                    TextAlpha = 1000;
-                    Properties.Settings.Default.ImageInfoOpacity = 1.0f;
-                    Properties.Settings.Default.ImageInfoBuffer = 200;
-                    if (Properties.Settings.Default.PageContolPopup)
-                        UserControlPopup.Setup("Next Page");
-
                     bDoubleDisplay = false;
-                    SetupImage();
+
+                    OnImageLoaded("Next Page");
                 };
 
-                //Start new Worker (Thread)
-                Loader.RunWorkerAsync();
-
-
-                //Stopwatch stop1 = new Stopwatch();
-                //stop1.Start();
-
-                
+                Loader.RunWorkerAsync();              
 
             }
+        }
+
+        public void PreviousImage()
+        {
+            if (CheckFirstPage())
+                return;
+
+            OnPreLoadNewImage();
+
+            BackgroundWorker Loader = new BackgroundWorker();
+
+
+            Loader.DoWork += delegate (object s, DoWorkEventArgs args)
+            {
+                byte[] byteStream = Comp.ExtractPrevFile();
+                image = new MagickImage(byteStream);
+
+                int FileSize = byteStream.Length;
+                
+                Originalimage = new MagickImage(image);
+
+                SetInfo(FileSize * sizeof(byte));
+            };
+
+            //Runs after Worker has finished
+            Loader.RunWorkerCompleted += delegate (object s, RunWorkerCompletedEventArgs args)
+            {
+                bDoubleDisplay = false;
+                OnImageLoaded("Previous Page");
+            };
+
+            Loader.RunWorkerAsync();
+
         }
 
         public void NextDoubleImage()
         {
 
-            if (!CheckLastPage())
+            if (CheckLastPage())
+                return;
+
+            OnPreLoadNewImage();
+
+            BackgroundWorker Loader = new BackgroundWorker();
+
+            Loader.DoWork += delegate (object s, DoWorkEventArgs args)
             {
-                Console.Out.WriteLine("NextPage");
-                ClearHUD();
-                CustomInfoBox.Instance.Hide();
-                UserControlPopup.Loading();
+                byte[] byteStream = Comp.ExtractNextFile();
+                image = new MagickImage(byteStream);
 
-                IsLoading = true;
-                //Main Function f
-                BackgroundWorker Loader = new BackgroundWorker();
+                int FileSize = byteStream.Length;
 
-
-                Loader.DoWork += delegate (object s, DoWorkEventArgs args)
+                if (Comp.iCurrentPage + 1 < Comp.TotalPages)
                 {
-                    byte[] byteStream = Comp.ExtractNextFile();
-                    image = new MagickImage(byteStream);
+                    byte[] byteStreamDouble = Comp.ExtractNextDoubleFile();
 
-                    if (Comp.iCurrentPage + 1 < Comp.TotalPages)
+                    MagickImage image2 = new MagickImage(byteStreamDouble);
+
+                    FileSize += byteStreamDouble.Length;
+
+                    if (!IsNativeDoublePage(image) && !IsNativeDoublePage(image2))
                     {
-                        byte[] byteStreamDouble = Comp.ExtractNextDoubleFile();
+                        int FirstWidth = image.Width;
+                        image.Extent(image.Width + image2.Width, image.Height,Gravity.West);
+                        image.Composite(image2, FirstWidth, 0);
+                    }
+                    else
+                        Comp.iCurrentDoublePage--;
 
-                        MagickImage image2 = new MagickImage(byteStreamDouble);
+                    Originalimage = new MagickImage(image);
+                    bDoubleDisplay = true;
+                }
+                else
+                {
+                    Comp.iCurrentDoublePage = Comp.iCurrentPage;
+                    bDoubleDisplay = false;
+                    Originalimage = new MagickImage(image);
+                }
 
-                        if (!IsNativeDoublePage(image) && !IsNativeDoublePage(image2))
-                        {
-                          //  int FirstWidth = image.Width;
-                            image.Crop(image.Width + image2.Width, image.Height);
-                            image.Composite(image2, image.Width/2, 0);
+                SetInfo(FileSize * sizeof(byte));
+            };
 
-                            //MagickImage Merged = new MagickImage(new MagickColor(Color.Black), image.Width + image2.Width, image.Height);
+            //Runs after Worker has finished
+            Loader.RunWorkerCompleted += delegate (object s, RunWorkerCompletedEventArgs args)
+            {
+                OnImageLoaded("Next Page");
+            };
+            
+            Loader.RunWorkerAsync();
 
-                            //Merged.Composite(image, 0, 0);
+        }
 
-                            //image = Merged;
-                        }
-                        else
-                            Comp.iCurrentDoublePage--;
+        public void PreviousDoubleImage()
+        {
+            if (CheckFirstPage())
+                return;
 
-                        Originalimage = new MagickImage(image);
-                        bDoubleDisplay = true;
+            OnPreLoadNewImage();
+
+            BackgroundWorker Loader = new BackgroundWorker();
+
+            Loader.DoWork += delegate (object s, DoWorkEventArgs args)
+            {
+                byte[] byteStream = Comp.ExtractPrevFile();
+                image = new MagickImage(byteStream);
+
+                int FileSize = byteStream.Length;
+
+                if (Comp.iCurrentPage > 0)
+                {
+                    byte[] byteStreamDouble = Comp.ExtractPrevDoubleFile();
+                    MagickImage image2 = new MagickImage(byteStreamDouble);
+
+                    if (!IsNativeDoublePage(image) && !IsNativeDoublePage(image2))
+                    {
+                        FileSize += byteStreamDouble.Length;
+                        image.Extent(image.Width + image2.Width, image.Height, Gravity.East);
+                        image.Composite(image2, 0, 0);
                     }
                     else
                     {
-                        Comp.iCurrentDoublePage = Comp.iCurrentPage;
-                        bDoubleDisplay = false;
-                        Originalimage = new MagickImage(image);
+                        Comp.iCurrentDoublePage++;
                     }
 
-
-
-                    //image = new MagickImage(byteStream);
-
-                    //image = images[imagepos++];
-                    //stop1.Stop();
-
-                    //Comp.iCurrentDoublePage = Comp.iCurrentPage;
-                    //
-                    SetInfo(byteStream.Length * sizeof(byte));
-
-                    //Originalimage = new MagickImage(image);
-                };
-
-                //Runs after Worker has finished
-                Loader.RunWorkerCompleted += delegate (object s, RunWorkerCompletedEventArgs args)
+                    Originalimage = new MagickImage(image);
+                    bDoubleDisplay = true;
+                }
+                else
                 {
-                    UserControlPopup.Loaded();
-                    IsLoading = false;
-                    TextAlpha = 1000;
-                    Properties.Settings.Default.ImageInfoOpacity = 1.0f;
-                    Properties.Settings.Default.ImageInfoBuffer = 200;
-                    if (Properties.Settings.Default.PageContolPopup)
-                        UserControlPopup.Setup("Next Page");
+                    Comp.iCurrentDoublePage = Comp.iCurrentPage;
+                    Originalimage = new MagickImage(image);
+                    bDoubleDisplay = false;
+                }
 
-                    //bDoubleDisplay = false;
-                    SetupImage();
-                };
+                SetInfo(FileSize * sizeof(byte));
+            };
 
-                //Start new Worker (Thread)
-                Loader.RunWorkerAsync();
+            //Runs after Worker has finished
+            Loader.RunWorkerCompleted += delegate (object s, RunWorkerCompletedEventArgs args)
+            {
+                OnImageLoaded("Prev Page");
+            };
 
+            Loader.RunWorkerAsync();
+        }
 
-                //Stopwatch stop1 = new Stopwatch();
-                //stop1.Start();
+        void OnPreLoadNewImage()
+        {
+            ClearHUD();
+            CustomInfoBox.Hide();
+            UserControlPopup.Loading();
 
-            }
+            IsLoading = true;
+        }
+
+        void OnImageLoaded(string Message)
+        {
+            UserControlPopup.Loaded();
+            IsLoading = false;
+
+            //TextAlpha = 1000;
+            CustomInfoBox.Show();
+
+            if (Properties.Settings.Default.PageContolPopup)
+                UserControlPopup.Setup(Message);
+
+            SetupImage();
         }
 
         public void ToggleYellow()
@@ -444,7 +503,7 @@ namespace AllNewComicReader
 
             if (Properties.Settings.Default.DoublePage)
             {
-                            GetDoubleImage();
+                GetDoubleImage();
             }
 
             SetupImage();
@@ -605,7 +664,7 @@ namespace AllNewComicReader
                 ReExtractCurentPage();
             else if (Properties.Settings.Default.DoublePage && bDoubleDisplay == false)
                 GetDoubleImage();
-            
+
             SetupImage();
         }
 
@@ -672,7 +731,16 @@ namespace AllNewComicReader
             
             */
 
-           
+            PageNumberControl.Show(Comp.TotalPages, Comp.iCurrentPage, Properties.Settings.Default.DoublePage ? Comp.iCurrentDoublePage : Comp.iCurrentPage);
+
+
+            CustomInfoBox.Instance.TextInput = ImageInfo;
+            CustomInfoBox.Show();
+
+            ImageUnscaledWidth = image.Width;
+            ImageUnscaledHeight = image.Height;
+
+
             AutoYellowBalance();
 
             image.Rotate(Rotation);
@@ -689,10 +757,6 @@ namespace AllNewComicReader
 
                 image.Modulate(new Percentage(Brightness), new Percentage(Saturation), new Percentage(Hue));
             }
-
-            
-
-
 
             ScaleBufferedImage();
             
@@ -953,39 +1017,6 @@ namespace AllNewComicReader
             return false;
         }
 
-        public void PreviousDoubleImage()
-        {
-            image = new MagickImage(Comp.ExtractPrevFile());
-            if (Comp.iCurrentPage > 0)
-            {
-                MagickImage image2 = new MagickImage(Comp.ExtractPrevDoubleFile());
-                //image = new MagickImage(Comp.ExtractPrevFile());
-                if (!IsNativeDoublePage(image) && !IsNativeDoublePage(image2))
-                {
-                
-                MagickImage Merged = new MagickImage(new MagickColor(Color.Black), image.Width + image2.Width, image.Height);
-
-                Merged.Composite(image, image2.Width, 0);
-                Merged.Composite(image2, 0, 0);
-
-                image = Merged; 
-                }
-                else
-                    Comp.iCurrentDoublePage++;
-
-                Originalimage = new MagickImage(image);
-                bDoubleDisplay = true;
-            }
-            else
-            {
-                Comp.iCurrentDoublePage = Comp.iCurrentPage;
-                //image = new MagickImage(Comp.ExtractPrevFile());
-                Originalimage = new MagickImage(image);
-                bDoubleDisplay = false;
-            }
-            SetupImage();
-        }
-
 
         void SetViewMode()
         {
@@ -1050,13 +1081,13 @@ namespace AllNewComicReader
 
         Size GetRotatedSize()
         {
-            int Width = image.BaseWidth;
-            int Height = image.BaseHeight;
+            int Width = ImageUnscaledWidth;
+            int Height = ImageUnscaledHeight;
 
             if (Rotation == 90.0 || Rotation == 270.0)
             {
-                Width = image.BaseHeight;
-                Height = image.BaseWidth;
+                Width = ImageUnscaledHeight;
+                Height = ImageUnscaledWidth;
             }
 
             return new Size(Width,Height);
@@ -1131,6 +1162,10 @@ namespace AllNewComicReader
                 
             if (!bActive)
                 return;
+
+            if (img == null)
+                return;
+
             /*
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             e.Graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;

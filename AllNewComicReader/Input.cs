@@ -55,7 +55,7 @@ namespace AllNewComicReader
         MainMenu mMenu;
         ImageEngine image;
         PictureBox pPictureBox;
-        CustomInfoBox Info;
+        //CustomInfoBox Info;
         Form1 GlobalFunctions;
 
         bool MouseonPictureBox;
@@ -93,9 +93,8 @@ namespace AllNewComicReader
             TimeoutToHide = TimeSpan.FromSeconds(1);
         }
 
-        public void Setup(ImageEngine img, CustomInfoBox info)
+        public void Setup(ImageEngine img)
         {
-            Info = info;
             image = img;
         }
         

@@ -127,9 +127,13 @@ namespace AllNewComicReader
         public string GetFileName()
         {
             return ArchiveSort[iCurrentPage];
-            //return Filenames[iCurrentPage];
         }
-        
+
+        public string GetDoublePageFileName()
+        {
+            return ArchiveSort[iCurrentDoublePage];
+        }
+
         public void ExtractArchive()
         {
             Extracted = new MemoryStream();
@@ -154,7 +158,6 @@ namespace AllNewComicReader
 
         public void StreamtoImage()
         {
-
             ArchiveFiles.AddLast(Extracted.ToArray());
 
             if(pCurrentPage == null)

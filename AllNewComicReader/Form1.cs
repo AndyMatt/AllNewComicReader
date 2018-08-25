@@ -133,8 +133,9 @@ namespace AllNewComicReader
 
             RefreshMenuItems();
 
-            customInfoBox1.Parent = pictureBox;
-            customInfoBox1.Location = new Point(0, 0);
+            CustomInfoBox.Instance.Parent = this;
+            //CustomInfoBox.Instance.Anchor = AnchorStyles.Bottom;
+            //CustomInfoBox.Instance.Location = new Point(0, 0);
             //customInfoBox1.BackColor = Color.FromArgb(155, 0, 0, 0);
             
             //input = new Input(this, mainMenu1, imageEngine, pictureBox, customInfoBox1, ProgramSettings, this);            
@@ -260,16 +261,14 @@ namespace AllNewComicReader
                    }
                    else
                    {
-                        imageEngine.FirstImage();
+                        imageEngine.FirstImageNotAsync();
                    }
 
 
-                   input.Setup(imageEngine, customInfoBox1);
+                   input.Setup(imageEngine);
 
-                   imageEngine.TextAlpha = 1000;
-                   Properties.Settings.Default.ImageInfoOpacity = 1.0f;
-                   Properties.Settings.Default.ImageInfoBuffer = 200;
-           
+            //imageEngine.TextAlpha = 1000;
+            CustomInfoBox.Show();           
 
             label1.Parent = pictureBox;
             label1.Location = new Point(pictureBox.Width - label1.Width + 32, pictureBox.Height - label1.Height - 30);
@@ -277,8 +276,8 @@ namespace AllNewComicReader
             label1.Location = new Point(0, 0);
 
 
-            customInfoBox1.TextInput = imageEngine.ImageInfo;
-            customInfoBox1.Active = true;
+            //CustomInfoBox.Instance.TextInput = imageEngine.ImageInfo;
+            //CustomInfoBox.Instance.Active = true;
 
             if (InputControl.Parent != pictureBox)
             InputControl.Parent = pictureBox;
@@ -428,9 +427,10 @@ namespace AllNewComicReader
         {
             RefreshMenuItems();
             UserControlPopup.Update();
-            customInfoBox1.TextInput = imageEngine.ImageInfo;
-            customInfoBox1.Fade();
-            imageEngine.TextAlpha -= 6;
+            CustomInfoBox.Instance.Update();
+            PageNumberControl.Update();
+            //CustomInfoBox.Instance.TextInput = imageEngine.ImageInfo;
+            //CustomInfoBox.Instance.Fade();
 
             //Refresh();
             //pictureBox.Refresh();
@@ -450,7 +450,7 @@ namespace AllNewComicReader
             if (!Open)
                 return;
 
-            customInfoBox1.Location = new Point(0, 0);
+            //CustomInfoBox.Instance.Location = new Point(0, 0);
             label1.Size = Size;
             label1.Location = new Point(0, 0);
 
@@ -540,7 +540,7 @@ namespace AllNewComicReader
         
         
 
-          void OnPaint(object sender, PaintEventArgs e)
+         void OnPaint(object sender, PaintEventArgs e)
          {
              if (!Open)
                  return;
@@ -548,9 +548,7 @@ namespace AllNewComicReader
              e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
              e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
 
-             UserControlPopup.Paint(sender, e, ClientSize);
-
-             if (imageEngine.MouseNextPageCounter > 0 && !imageEngine.CheckLastPage())
+            if (imageEngine.MouseNextPageCounter > 0 && !imageEngine.CheckLastPage())
               {
                   Image myImage = Properties.Resources.NextPage;
                   myImage = (Image)(new Bitmap(myImage, new Size(100,100)));
@@ -566,44 +564,12 @@ namespace AllNewComicReader
                   myImage = (Image)(new Bitmap(myImage, new Size(100, 100)));
                   myImage = SetImageOpacity(myImage, (float)imageEngine.MousePrevPageCounter / 3.0f);
                   e.Graphics.DrawImage(myImage, new Point(0, e.ClipRectangle.Height - 100));
-
               }
 
-              if (!Properties.Settings.Default.TTPageNumber)
-                return;
-
-              int alpha = imageEngine.TextAlpha;
-              if (imageEngine.TextAlpha > 255)
-                 alpha = 255;
-
-              if (imageEngine.TextAlpha > 0)
-             {
-                 FontFamily fontFamily = new FontFamily("Arial Black");
-
-                 Font font = new Font(fontFamily, 15, FontStyle.Bold);
-                 StringFormat strformat = new StringFormat();
-
-                 string szbuf;
-
-                 if (Properties.Settings.Default.DoublePage && CompressEngine.iCurrentPage != CompressEngine.iCurrentDoublePage)
-                 {
-                     if(CompressEngine.iCurrentPage < CompressEngine.iCurrentDoublePage)
-                         szbuf = CompressEngine.iCurrentPage + 1 + "-" + (CompressEngine.iCurrentDoublePage + 1) + "/" + CompressEngine.TotalPages;
-                     else
-                         szbuf = (CompressEngine.iCurrentDoublePage + 1) + "-" + (CompressEngine.iCurrentPage + 1) + "/" + CompressEngine.TotalPages;
-                 }
-                 else
-                 szbuf = CompressEngine.iCurrentPage + 1 + "/" + CompressEngine.TotalPages;
-
-                 Size stringsize = e.Graphics.MeasureString(szbuf, font).ToSize();
-                 OutlineText text = new OutlineText();
-                 text.TextOutline(Color.FromArgb(alpha, 255, 255, 255), Color.FromArgb(alpha, 0, 0, 0), 8);
-                 text.DrawString(e.Graphics, fontFamily,
-                     FontStyle.Bold, 17, szbuf, new Point(ClientSize.Width / 2 - (stringsize.Width / 2), ClientSize.Height - stringsize.Height), strformat);
-                 //fontFamily.Dispose();
-                 //e.Graphics.Dispose();
-             }
-         }
+            CustomInfoBox.Instance.Paint(sender, e);
+            PageNumberControl.Paint(sender, e, ClientSize);
+            UserControlPopup.Paint(sender, e, ClientSize);
+        }
 
           private void OpenFile(object sender, EventArgs e)
           {

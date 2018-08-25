@@ -34,31 +34,7 @@ namespace AllNewComicReader.Properties {
                 this["MainMenuOffset"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public float ImageInfoOpacity {
-            get {
-                return ((float)(this["ImageInfoOpacity"]));
-            }
-            set {
-                this["ImageInfoOpacity"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("200")]
-        public int ImageInfoBuffer {
-            get {
-                return ((int)(this["ImageInfoBuffer"]));
-            }
-            set {
-                this["ImageInfoBuffer"] = value;
-            }
-        }
-        
+               
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]

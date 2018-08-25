@@ -63,9 +63,7 @@
             this.menuItem5 = new System.Windows.Forms.MenuItem();
             this.menuItemAbout = new System.Windows.Forms.MenuItem();
             this.InputControl = new System.Windows.Forms.Panel();
-            this.customInfoBox1 = CustomInfoBox.Instance;
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
-            this.InputControl.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox
@@ -290,23 +288,11 @@
             this.InputControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.InputControl.Controls.Add(this.customInfoBox1);
             this.InputControl.Location = new System.Drawing.Point(-3, -1);
             this.InputControl.Name = "InputControl";
             this.InputControl.Size = new System.Drawing.Size(1088, 572);
             this.InputControl.TabIndex = 3;
             this.InputControl.Visible = false;
-            // 
-            // customInfoBox1
-            // 
-            this.customInfoBox1.BackColor = System.Drawing.Color.Transparent;
-            this.customInfoBox1.BorderColor = System.Drawing.Color.White;
-            this.customInfoBox1.Font = new System.Drawing.Font("Arial Narrow", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.customInfoBox1.Location = new System.Drawing.Point(3, 477);
-            this.customInfoBox1.Name = "customInfoBox1";
-            this.customInfoBox1.Size = new System.Drawing.Size(147, 21);
-            this.customInfoBox1.TabIndex = 2;
-            this.customInfoBox1.TextInput = " aaaaaaaaaaaaaaaaaaaaaaa                   ";
             // 
             // Form1
             // 
@@ -323,7 +309,6 @@
             this.Name = "Form1";
             this.Text = "All-New Comic Reader";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
-            this.InputControl.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -335,7 +320,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.MainMenu mainMenu1;
         private System.Windows.Forms.MenuItem menuItemFile;
-        private CustomInfoBox customInfoBox1;
+        //private CustomInfoBox customInfoBox1;
         private System.Windows.Forms.Panel InputControl;
         private System.Windows.Forms.MenuItem menuItem2;
         private System.Windows.Forms.MenuItem menuItem3;

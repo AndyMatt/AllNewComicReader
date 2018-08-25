@@ -25,17 +25,17 @@ namespace AllNewComicReader
                 return instance;
             }
         }
-        private Color colorBorder = Color.Red;
+        private Color colorBorder = Color.White;
         private string stringText = "";
-        private float Opacity = 0.0f;
-        public int BackOpacty = 200;
-        int OpacityBuffer = 200;
-        public bool Active;
+
+        public static int BORDER_OFFSET = 1;
+        public static int TEXT_OFFSET = 3;
+        static int mAlpha = 0;
+        static int mTrueAlpha = 0;
 
         private CustomInfoBox()
             : base()
         {
-            Active = false;
             InitializeComponent();
             SetStyle(ControlStyles.SupportsTransparentBackColor|
                 ControlStyles.OptimizedDoubleBuffer| 
@@ -43,70 +43,66 @@ namespace AllNewComicReader
                 ControlStyles.UserPaint,
                 true);
             BackColor = Color.Transparent;
-            Opacity = 1.0f;
             //this.DoubleBuffered = true;
         }
 
-        public void Fade()
+        public static new void Show()
         {
-            Opacity = Properties.Settings.Default.ImageInfoOpacity;
-            OpacityBuffer = Properties.Settings.Default.ImageInfoBuffer;
+            mAlpha = 1000;
+            mTrueAlpha = 255;
+        }
 
-            if (OpacityBuffer > 0)
-            {
-                Properties.Settings.Default.ImageInfoBuffer--;
-                Visible = true;
-            }
-            else
-            {
-                if (Opacity > 0)
-                {
-                    Properties.Settings.Default.ImageInfoOpacity -= 0.02f;
-                }
-                if (Opacity < 0)
-                {
-                    Visible = false;
-                    Opacity = 0;
-                }
-            }
-
-            //Properties.Settings.Default.ImageInfoOpacity = Opacity;
-            //Properties.Settings.Default.ImageInfoBuffer = OpacityBuffer;
+        public static new void Hide()
+        {
+            mAlpha = 0;
+            mTrueAlpha = 0;
         }
 
 
-        protected override void OnPaint(PaintEventArgs e)
+        public new void Update()
         {
-            if (!Active)
+            if (mAlpha > 0)
+                mAlpha -= 6;
+
+            if (mAlpha < 0)
+                mAlpha = 0;
+
+            mTrueAlpha = mAlpha;
+
+            if (mTrueAlpha > 255)
+                mTrueAlpha = 255;
+        }
+
+        public new void Paint(object sender, PaintEventArgs e)
+        {
+            if (!Visible)
                 return;
 
             if (!Properties.Settings.Default.TTPageInfo)
                 return;
 
-            if (Opacity != 0)
+            if (mAlpha > 0)
             {
-                Location = new Point(3, Parent.ClientSize.Height - Height - 3);
+                Location = new Point(BORDER_OFFSET, Parent.ClientSize.Height - Height - BORDER_OFFSET);
 
-                int TextOpacity = (int)(255 * Opacity);
-                Color TextColor = Color.FromArgb(TextOpacity, 255, 255, 255);
+                Color TextColor = Color.FromArgb(mTrueAlpha, 255, 255, 255);
 
-                Color BrushColorBorder = Color.FromArgb((int)(colorBorder.A * Opacity), colorBorder.R, colorBorder.G, colorBorder.B);
+                Color BrushColorBorder = Color.FromArgb(mTrueAlpha, colorBorder.R, colorBorder.G, colorBorder.B);
 
 
                 string RenderText = stringText.Replace("@n", Environment.NewLine);
                 Size = SetAutoSize(e.Graphics, RenderText);
-                //base.OnPaint(e);
-                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb((int)(200 * Opacity), 0, 0, 0)), 0, 0, Width, Height);
-                //e.Graphics.DrawRectangle(new Pen(Color.FromArgb(155,0,0,0),20),0,0,Width,Height);
+
+                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb((int)(200.0f * (mTrueAlpha/255.0f)), 0, 0, 0)), Location.X, Location.Y, Size.Width, Size.Height);
 
                 if (e.ClipRectangle.X == 0 && e.ClipRectangle.Y == 0)
                     e.Graphics.DrawRectangle(
                         new Pen(
                             new SolidBrush(BrushColorBorder), 3),
-                            new Rectangle(e.ClipRectangle.Location.X, e.ClipRectangle.Location.Y, e.ClipRectangle.Width - 1, e.ClipRectangle.Height - 1));
-                e.Graphics.DrawString(RenderText, Font, new SolidBrush(BrushColorBorder), new Point(3, 2), StringFormat.GenericTypographic);
+                            new Rectangle(Location.X, Location.Y, Size.Width - 1, Size.Height - 1));
+                e.Graphics.DrawString(RenderText, Font, new SolidBrush(BrushColorBorder), new Point(Location.X + TEXT_OFFSET, Location.Y + TEXT_OFFSET), StringFormat.GenericTypographic);
 
-            }
+            }  
         }
 
         public Size SetAutoSize(Graphics g, string RenderText)
