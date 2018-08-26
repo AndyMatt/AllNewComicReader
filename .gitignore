@@ -5,3 +5,5 @@ AllNewComicReader/obj/*
 *.csproj
 *.vcxproj.user
 *.log
+/ComicThumbnailHandler/x64/
+/ComicThumbnailHandler/Win32/

@@ -31,10 +31,6 @@
     <None Include="GlobalExportFunctions.def">
       <Filter>Resource Files\Source Files</Filter>
     </None>
-    <None Include="chocolatechipcookies.recipe" />
-    <None Include="RecipeThumbnailProvider.h">
-      <Filter>Header Files</Filter>
-    </None>
     <None Include="7z_C\lzma.txt">
       <Filter>Header Files\7z_C</Filter>
     </None>
@@ -67,6 +63,9 @@
     </None>
     <None Include="file.ico">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ComicThumbnailProvider.h">
+      <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -255,9 +254,6 @@
     <ClCompile Include="Reg.cpp">
       <Filter>Resource Files\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RecipeThumbnailProvider.cpp">
-      <Filter>Resource Files\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="7z_C\Bra86.c">
       <Filter>Header Files\7z_C</Filter>
     </ClCompile>
@@ -408,9 +404,12 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Resource Files\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ComicThumbnailProvider.cpp">
+      <Filter>Resource Files\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="CppShellExtThumbnailHandler.rc">
+    <ResourceCompile Include="ComicThumbnailHandler.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

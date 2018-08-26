@@ -29,7 +29,7 @@ EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED
 WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
 \*******************************************************************************/
 
-#include "RecipeThumbnailProvider.h"
+#include "ComicThumbnailProvider.h"
 #include <Shlwapi.h>
 #include <Wincrypt.h>   // For CryptStringToBinary.
 #include <msxml6.h>
@@ -87,14 +87,14 @@ char easytolower(char in)
   return in;
 }
 
-RecipeThumbnailProvider::RecipeThumbnailProvider() : m_cRef(1)
+ComicThumbnailProvider::ComicThumbnailProvider() : m_cRef(1)
 {
 	m_pSite = NULL;
     InterlockedIncrement(&g_cDllRef);
 }
 
 
-RecipeThumbnailProvider::~RecipeThumbnailProvider()
+ComicThumbnailProvider::~ComicThumbnailProvider()
 {
 	    if (m_pSite)
     {
@@ -108,27 +108,27 @@ RecipeThumbnailProvider::~RecipeThumbnailProvider()
 #pragma region IUnknown
 
 // Query to the interface the component supported.
-STDMETHODIMP RecipeThumbnailProvider::QueryInterface(REFIID riid, void **ppv)
+STDMETHODIMP ComicThumbnailProvider::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
 		//QITABENT(RecipeThumbnailProvider, IInitializeWithStream),
-		QITABENT(RecipeThumbnailProvider, IInitializeWithFile), 
-        QITABENT(RecipeThumbnailProvider, IThumbnailProvider),
-		QITABENT(RecipeThumbnailProvider, IObjectWithSite),
+		QITABENT(ComicThumbnailProvider, IInitializeWithFile),
+        QITABENT(ComicThumbnailProvider, IThumbnailProvider),
+		QITABENT(ComicThumbnailProvider, IObjectWithSite),
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
 }
 
 // Increase the reference count for an interface on an object.
-STDMETHODIMP_(ULONG) RecipeThumbnailProvider::AddRef()
+STDMETHODIMP_(ULONG) ComicThumbnailProvider::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
 // Decrease the reference count for an interface on an object.
-STDMETHODIMP_(ULONG) RecipeThumbnailProvider::Release()
+STDMETHODIMP_(ULONG) ComicThumbnailProvider::Release()
 {
     ULONG cRef = InterlockedDecrement(&m_cRef);
     if (0 == cRef)
@@ -145,7 +145,7 @@ STDMETHODIMP_(ULONG) RecipeThumbnailProvider::Release()
 #pragma region IInitializeWithStream
 
 // Initializes the thumbnail handler with a stream.
-STDMETHODIMP RecipeThumbnailProvider::Initialize(LPCWSTR pszFilePath, DWORD grfMode)
+STDMETHODIMP ComicThumbnailProvider::Initialize(LPCWSTR pszFilePath, DWORD grfMode)
 {
 
 	wcscpy_s(m_szFile, pszFilePath); 
@@ -189,7 +189,7 @@ HRESULT error( fex_err_t err )
 // GetThumbnail provides a handle to the retrieved image. It also provides a 
 // value that indicates the color format of the image and whether it has 
 // valid alpha information.
-STDMETHODIMP RecipeThumbnailProvider::GetThumbnail(UINT cx, HBITMAP *phbmp, 
+STDMETHODIMP ComicThumbnailProvider::GetThumbnail(UINT cx, HBITMAP *phbmp,
     WTS_ALPHATYPE *pdwAlpha)
 {
 
@@ -378,7 +378,7 @@ STDMETHODIMP RecipeThumbnailProvider::GetThumbnail(UINT cx, HBITMAP *phbmp,
 
     // Function LoadAnImage: accepts a file name and returns a HBITMAP.
     // On error, it returns 0.
-    HBITMAP RecipeThumbnailProvider::LoadAnImage(char* data, int size)
+    HBITMAP ComicThumbnailProvider::LoadAnImage(char* data, int size)
     {
 
 		IStream* s;
@@ -440,7 +440,7 @@ STDMETHODIMP RecipeThumbnailProvider::GetThumbnail(UINT cx, HBITMAP *phbmp,
 
 	
 
-STDMETHODIMP RecipeThumbnailProvider::GetSite(REFIID riid, 
+STDMETHODIMP ComicThumbnailProvider::GetSite(REFIID riid,
                                          void** ppvSite)
 {
     if (m_pSite)
@@ -453,7 +453,7 @@ STDMETHODIMP RecipeThumbnailProvider::GetSite(REFIID riid,
 }
 
 
-Gdiplus::Bitmap* RecipeThumbnailProvider::ResizeClone(Gdiplus::Bitmap *bmp, INT width, INT height)
+Gdiplus::Bitmap* ComicThumbnailProvider::ResizeClone(Gdiplus::Bitmap *bmp, INT width, INT height)
 {
     UINT o_height = bmp->GetHeight();
     UINT o_width = bmp->GetWidth();
@@ -472,7 +472,7 @@ Gdiplus::Bitmap* RecipeThumbnailProvider::ResizeClone(Gdiplus::Bitmap *bmp, INT 
     return newBitmap;
 }
 
-STDMETHODIMP RecipeThumbnailProvider::SetSite(IUnknown* pUnkSite)
+STDMETHODIMP ComicThumbnailProvider::SetSite(IUnknown* pUnkSite)
 {
     if (m_pSite)
     {

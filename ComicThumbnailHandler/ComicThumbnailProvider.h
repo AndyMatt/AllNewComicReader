@@ -43,7 +43,7 @@ WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
 
 //class RecipeThumbnailProvider : public IInitializeWithFile, public IThumbnailProvider
 //class RecipeThumbnailProvider : public IThumbnailProvider, IObjectWithSite, IInitializeWithStream
-class RecipeThumbnailProvider :	public IThumbnailProvider, IObjectWithSite, IInitializeWithFile
+class ComicThumbnailProvider :	public IThumbnailProvider, IObjectWithSite, IInitializeWithFile
 
 {
 public:
@@ -64,10 +64,10 @@ public:
 
 	HBITMAP LoadAnImage(char* data, int size);
 
-    RecipeThumbnailProvider();
+    ComicThumbnailProvider();
 
 protected:
-    ~RecipeThumbnailProvider();
+    ~ComicThumbnailProvider();
 
 private:
     // Reference count of component.

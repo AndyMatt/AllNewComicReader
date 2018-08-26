@@ -15,7 +15,7 @@ WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
 \***************************************************************************/
 
 #include "ClassFactory.h"
-#include "RecipeThumbnailProvider.h"
+#include "ComicThumbnailProvider.h"
 #include <new>
 #include <Shlwapi.h>
 #pragma comment(lib, "shlwapi.lib")
@@ -79,7 +79,7 @@ STDMETHODIMP ClassFactory::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void
         hr = E_OUTOFMEMORY;
 
         // Create the COM component.
-        RecipeThumbnailProvider *pExt = new (std::nothrow) RecipeThumbnailProvider();
+		ComicThumbnailProvider *pExt = new (std::nothrow) ComicThumbnailProvider();
         if (pExt)
         {
             // Query the specified interface.
