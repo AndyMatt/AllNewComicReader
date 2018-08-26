@@ -26,22 +26,36 @@ OutputDir=C:\Users\Andrew
 OutputBaseFilename=ComicReaderX
 Compression=lzma
 SolidCompression=yes
+ChangesAssociations = yes
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+Name: cbzAssociation; Description: "Associate "".cbz"" with ComicReaderX"; GroupDescription: File extensions:
+Name: cbrAssociation; Description: "Associate "".cbr"" with ComicReaderX"; GroupDescription: File extensions:
+Name: cbtAssociation; Description: "Associate "".cbt"" with ComicReaderX"; GroupDescription: File extensions:
+Name: czAssociation; Description: "Associate "".cz"" with ComicReaderX"; GroupDescription: File extensions:
+
+[Registry]
+Root: HKCR; Subkey: ".cbz"; ValueType: string; ValueName: ""; ValueData: "ComicFile"; Flags: uninsdeletevalue; Tasks: cbzAssociation 
+Root: HKCR; Subkey: "ComicFile"; ValueType: string; ValueName: ""; ValueData: "Comic Archive"; Flags: uninsdeletekey;
+Root: HKCR; Subkey: "ComicFile\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\AllNewComicReader.exe,1"
+Root: HKCR; Subkey: "ComicFile\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\AllNewComicReader.exe"" ""%1"""
+
 
 [Files]
-Source: "C:\Users\Andrew\Downloads\dotNetFx40_Full_x86_x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall; AfterInstall: InstallFramework; Check: FrameworkIsNotInstalled   
-Source: "C:\Users\Andrew\VS2010\AllNewComicReader\AllNewComicReader\bin\x64\Deploy\AllNewComicReader.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Andrew\VS2010\AllNewComicReader\AllNewComicReader\bin\Deploy\MyImageMagickXmlFiles\*"; DestDir: "{app}\MyImageMagickXmlFiles\"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\Andrew\VS2010\AllNewComicReader\AllNewComicReader\bin\x64\Deploy\7z64.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Andrew\VS2010\AllNewComicReader\AllNewComicReader\bin\x64\Deploy\Magick.NET-Q8-x64.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Andrew\VS2010\AllNewComicReader\AllNewComicReader\bin\x64\Deploy\Magick.NET-Q8-x64.Native.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Andrew\VS2010\AllNewComicReader\AllNewComicReader\bin\x64\Deploy\SevenZipSharp.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Andrew\VS2010\AllNewComicReader\AllNewComicReader\bin\x64\Deploy\TextDesignerCSLibrary.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "InnoSetup\Dependecies\dotNetFx40_Full_setup.exe"; DestDir: {tmp}; Flags: deleteafterinstall; AfterInstall: InstallFramework; Check: FrameworkIsNotInstalled   
+Source: "AllNewComicReader\bin\Deploy\AllNewComicReader.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "AllNewComicReader\bin\Deploy\MyImageMagickXmlFiles\*"; DestDir: "{app}\MyImageMagickXmlFiles\"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "AllNewComicReader\bin\Deploy\7z.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "AllNewComicReader\bin\Deploy\7z64.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "AllNewComicReader\bin\Deploy\Magick.NET-Q8-AnyCPU.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "AllNewComicReader\bin\Deploy\SevenZipSharp.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "AllNewComicReader\bin\Deploy\TextDesignerCSLibrary.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "ComicThumbnailHandler\Win32\Release\ComicThumbnailHandler32.dll"; DestDir: "{app}"; Flags: regserver 32bit; Check: "not IsWin64"
+Source: "ComicThumbnailHandler\x64\Release\ComicThumbnailHandler64.dll"; DestDir: "{app}"; Flags: regserver 64bit; Check: IsWin64
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -56,7 +70,7 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 var
   ResultCode: Integer;
 begin
-  if not Exec(ExpandConstant('{tmp}\dotNetFx40_Full_x86_x64.exe'), '/q /norestart', '', SW_SHOW, ewWaitUntilTerminated, ResultCode) then
+  if not Exec(ExpandConstant('{tmp}\dotNetFx40_Full_setup.exe'), '/q /norestart', '', SW_SHOW, ewWaitUntilTerminated, ResultCode) then
   begin
     { you can interact with the user that the installation failed }
     MsgBox('.NET installation failed with code: ' + IntToStr(ResultCode) + '.',
