@@ -40,7 +40,6 @@
             this.menuItem7 = new System.Windows.Forms.MenuItem();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.menuItem9 = new System.Windows.Forms.MenuItem();
-            this.menuItem3 = new System.Windows.Forms.MenuItem();
             this.menuItem8 = new System.Windows.Forms.MenuItem();
             this.menuItemView = new System.Windows.Forms.MenuItem();
             this.menuItemPageView = new System.Windows.Forms.MenuItem();
@@ -63,6 +62,8 @@
             this.menuItem5 = new System.Windows.Forms.MenuItem();
             this.menuItemAbout = new System.Windows.Forms.MenuItem();
             this.InputControl = new System.Windows.Forms.Panel();
+            this.menuItem16 = new System.Windows.Forms.MenuItem();
+            this.menuItemSettings = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -104,7 +105,6 @@
             this.menuItem7,
             this.menuItem1,
             this.menuItem9,
-            this.menuItem3,
             this.menuItem8});
             this.menuItemFile.ShowShortcut = false;
             this.menuItemFile.Text = "File";
@@ -137,17 +137,9 @@
             this.menuItem9.Index = 4;
             this.menuItem9.Text = "-";
             // 
-            // menuItem3
-            // 
-            this.menuItem3.Index = 5;
-            this.menuItem3.Shortcut = System.Windows.Forms.Shortcut.CtrlS;
-            this.menuItem3.ShowShortcut = false;
-            this.menuItem3.Text = "Settings";
-            this.menuItem3.Click += new System.EventHandler(this.OpenSettings);
-            // 
             // menuItem8
             // 
-            this.menuItem8.Index = 6;
+            this.menuItem8.Index = 5;
             this.menuItem8.Text = "Exit";
             // 
             // menuItemView
@@ -162,7 +154,9 @@
             this.menuItem12,
             this.menuItem13,
             this.menuItem14,
-            this.menuItemDoublePage});
+            this.menuItemDoublePage,
+            this.menuItem16,
+            this.menuItemSettings});
             this.menuItemView.Text = "View";
             this.menuItemView.Popup += new System.EventHandler(this.menuItemView_Popup);
             // 
@@ -294,6 +288,17 @@
             this.InputControl.TabIndex = 3;
             this.InputControl.Visible = false;
             // 
+            // menuItem16
+            // 
+            this.menuItem16.Index = 9;
+            this.menuItem16.Text = "-";
+            // 
+            // menuItemSettings
+            // 
+            this.menuItemSettings.Index = 10;
+            this.menuItemSettings.Text = "Settings";
+            this.menuItemSettings.Click += new System.EventHandler(this.OpenSettings);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -323,7 +328,6 @@
         //private CustomInfoBox customInfoBox1;
         private System.Windows.Forms.Panel InputControl;
         private System.Windows.Forms.MenuItem menuItem2;
-        private System.Windows.Forms.MenuItem menuItem3;
         private System.Windows.Forms.MenuItem menuItemView;
         private System.Windows.Forms.MenuItem menuItemPageView;
         private System.Windows.Forms.MenuItem menuItemSettoWidth;
@@ -349,6 +353,8 @@
         private System.Windows.Forms.MenuItem menuItem13;
         private System.Windows.Forms.MenuItem menuItem14;
         private System.Windows.Forms.MenuItem menuItem1;
+        private System.Windows.Forms.MenuItem menuItem16;
+        private System.Windows.Forms.MenuItem menuItemSettings;
     }
 }
 
