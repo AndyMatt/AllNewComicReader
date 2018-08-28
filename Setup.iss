@@ -40,6 +40,9 @@ Name: czAssociation; Description: "Associate "".cz"" with ComicReaderX"; GroupDe
 
 [Registry]
 Root: HKCR; Subkey: ".cbz"; ValueType: string; ValueName: ""; ValueData: "ComicFile"; Flags: uninsdeletevalue; Tasks: cbzAssociation 
+Root: HKCR; Subkey: ".cbr"; ValueType: string; ValueName: ""; ValueData: "ComicFile"; Flags: uninsdeletevalue; Tasks: cbrAssociation 
+Root: HKCR; Subkey: ".cbt"; ValueType: string; ValueName: ""; ValueData: "ComicFile"; Flags: uninsdeletevalue; Tasks: cbtAssociation 
+Root: HKCR; Subkey: ".cz"; ValueType: string; ValueName: ""; ValueData: "ComicFile"; Flags: uninsdeletevalue; Tasks: czAssociation 
 Root: HKCR; Subkey: "ComicFile"; ValueType: string; ValueName: ""; ValueData: "Comic Archive"; Flags: uninsdeletekey;
 Root: HKCR; Subkey: "ComicFile\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\AllNewComicReader.exe,1"
 Root: HKCR; Subkey: "ComicFile\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\AllNewComicReader.exe"" ""%1"""
