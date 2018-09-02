@@ -48,6 +48,9 @@ namespace AllNewComicReader
             if (!isloading && Opacity < 1)
                 return;
 
+            if (Text == null)
+                return;
+
             FontFamily fontFamily = new FontFamily("Arial Black");
             OutlineText text = new OutlineText();
             StringFormat strformat = new StringFormat();

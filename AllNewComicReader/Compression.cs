@@ -5,15 +5,15 @@ using System.Text;
 using System.IO;
 using SevenZip;
 using System.Windows.Forms;
+using AllNewComicReader.Helper;
 
 namespace AllNewComicReader
 {
     class Compression
     {
         String ArchiveFilePath;
-        LinkedList<Byte[]> ArchiveFiles;
+        EnhancedDictionary<int,Byte[]> ArchiveFiles;
         public string[] Filenames;
-        LinkedListNode<Byte[]> pCurrentPage;
 
         SevenZipExtractor extractor;
         SevenZipExtractor Streamedextractor;
@@ -21,7 +21,7 @@ namespace AllNewComicReader
         Dictionary<int, string> ArchiveSort;
 
         MemoryStream Extracted;
-        FileStream fs;
+        readonly FileStream fs;
         //MemoryStream ms;
         public int TotalPages;
         public int CurrentPosition;
@@ -36,14 +36,13 @@ namespace AllNewComicReader
         {
             ArchiveFilePath = filename;
             ProcessStream = new ProcessExtractedStream(this.StreamtoImage);
-            //CheckifSupported("blabla.jpg");
+
             ArchiveSort = new Dictionary<int, string>();
             Initalise7zip();
             CurrentPosition = 0;
             iCurrentPage = -1;
             fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            //ms = new MemoryStream();
-            //fs.CopyTo(ms);
+
             extractor = new SevenZipExtractor(fs);
 
             Streamedextractor = new SevenZipExtractor(fs);
@@ -52,27 +51,9 @@ namespace AllNewComicReader
 
             Streamedextractor.ExtractionFinished += new EventHandler<EventArgs>(Streamedextractor_FileExtractionFinished);
 
-            ArchiveFiles = new LinkedList<Byte[]>();
+            ArchiveFiles = new EnhancedDictionary<int,Byte[]>();
             SortArchive();
-
-            //ExtractArchive();
         }
-
-        /*
-        public List<Byte[]> GetAllPages()
-        {
-            List<Byte[]> filesex = new List<Byte[]>();
-
-             for(int i = 0; i < extractor.FilesCount; i++)
-            {
-                MemoryStream newfs = new MemoryStream();
-                extractor.ExtractFile(i, newfs);
-                filesex.Add(newfs.ToArray());
-            }
-
-            return filesex;
-        }
-         */
 
         public void SortArchive()
         {
@@ -146,7 +127,6 @@ namespace AllNewComicReader
 
         public void Streamedextractor_FileExtractionFinished(object sender, EventArgs e)
         {
-            //ProcessStream.BeginInvoke(null, null);
             StreamtoImage();
         }
 
@@ -158,10 +138,7 @@ namespace AllNewComicReader
 
         public void StreamtoImage()
         {
-            ArchiveFiles.AddLast(Extracted.ToArray());
-
-            if(pCurrentPage == null)
-                pCurrentPage = ArchiveFiles.First;
+            ArchiveFiles.Add(CurrentPosition, Extracted.ToArray());
 
             if (CurrentPosition <= TotalPages - 1)
             ExtractArchive();
@@ -172,20 +149,9 @@ namespace AllNewComicReader
             if (Properties.Settings.Default.DoublePage)
                 iCurrentDoublePage = 0;
 
-            if (CurrentPosition <= 1)
-            {
-                MemoryStream newfs = new MemoryStream();
-                extractor.ExtractFile(ArchiveSort[0], newfs);
+            iCurrentPage = 0;
 
-                iCurrentPage = 0;
-                return newfs.ToArray();
-            }
-            else
-            {
-                pCurrentPage = ArchiveFiles.First;
-                iCurrentPage = 0;
-                return pCurrentPage.Value;
-            }
+            return RetrieveFileFromBufferOrArchive(iCurrentPage);
         }
 
         public Byte[] GetLastFile()
@@ -193,44 +159,21 @@ namespace AllNewComicReader
             if (Properties.Settings.Default.DoublePage)
                 iCurrentDoublePage = TotalPages - 1;
 
-            if (CurrentPosition < TotalPages)
-            {
-                MemoryStream newfs = new MemoryStream();
-                extractor.ExtractFile(ArchiveSort[TotalPages - 1], newfs);
+            iCurrentPage = TotalPages - 1;
 
-                iCurrentPage = TotalPages - 1;
-                return newfs.ToArray();
-            }
-            else
-            {
-                pCurrentPage = ArchiveFiles.Last;
-                iCurrentPage = TotalPages - 1;
-                return pCurrentPage.Value;
-            }
+            return RetrieveFileFromBufferOrArchive(iCurrentPage);          
         }
 
         public Byte[] GetPage(uint Position)
         {
             iCurrentPage = (int)Position;
-            MemoryStream newfs = new MemoryStream();
-            extractor.ExtractFile((int)Position, newfs);
-            return newfs.ToArray();
+
+            return RetrieveFileFromBufferOrArchive(iCurrentPage);
         }
 
         public Byte[] ExtractCurrentFile()
         {
-            if (CurrentPosition < iCurrentPage || iCurrentPage == 0)
-            {
-                MemoryStream newfs = new MemoryStream();
-                extractor.ExtractFile(ArchiveSort[iCurrentPage], newfs);
-
-                return newfs.ToArray();
-            }
-            else
-            {
-                return ArchiveFiles.ElementAt<byte[]>(iCurrentPage);
-
-            }
+            return RetrieveFileFromBufferOrArchive(iCurrentPage);
         }
 
 
@@ -242,23 +185,9 @@ namespace AllNewComicReader
                     iCurrentPage = iCurrentDoublePage;
             }
 
-            if (iCurrentPage < TotalPages - 1)
             iCurrentPage++;
 
-            if (ArchiveFiles.Count -1  < iCurrentPage)
-            {
-                MemoryStream newfs = new MemoryStream();
-                SevenZipExtractor Extr = new SevenZipExtractor(ArchiveFilePath);
-                Extr.ExtractFile(ArchiveSort[iCurrentPage], newfs);
-                //extractor.BeginExtractFile(ArchiveSort[iCurrentPage], newfs);
-
-                return newfs.ToArray();
-            }
-            else
-            {
-                return ArchiveFiles.ElementAt<byte[]>(iCurrentPage);
-
-            }
+            return RetrieveFileFromBufferOrArchive(iCurrentPage);           
         }
 
 
@@ -273,37 +202,14 @@ namespace AllNewComicReader
             if (iCurrentPage > 0)
             iCurrentPage--;
 
-            if (CurrentPosition <= iCurrentPage)
-            {
-                MemoryStream newfs = new MemoryStream();
-                extractor.ExtractFile(ArchiveSort[iCurrentPage], newfs);
-
-                return newfs.ToArray();
-            }
-            else
-            {
-                return ArchiveFiles.ElementAt<byte[]>(iCurrentPage);
-
-            }
+            return RetrieveFileFromBufferOrArchive(iCurrentPage);
         }
 
         public Byte[] ExtractNextDoubleFile()
         {
             iCurrentDoublePage = iCurrentPage + 1;
 
-            if (CurrentPosition < iCurrentDoublePage)
-            {
-                MemoryStream newfs = new MemoryStream();
-                SevenZipExtractor Extr = new SevenZipExtractor(ArchiveFilePath);
-                Extr.ExtractFile(ArchiveSort[iCurrentDoublePage], newfs);
-
-                return newfs.ToArray();
-            }
-            else
-            {
-                return ArchiveFiles.ElementAt<byte[]>(iCurrentDoublePage);
-
-            }
+            return RetrieveFileFromBufferOrArchive(iCurrentDoublePage);
         }
 
 
@@ -311,19 +217,33 @@ namespace AllNewComicReader
         {
             iCurrentDoublePage = iCurrentPage - 1;
 
-            if (CurrentPosition <= iCurrentDoublePage)
-            {
-                MemoryStream newfs = new MemoryStream();
-                extractor.ExtractFile(ArchiveSort[iCurrentDoublePage], newfs);
-
-                return newfs.ToArray();
-            }
-            else
-            {
-                return ArchiveFiles.ElementAt<byte[]>(iCurrentDoublePage);
-
-            }
+            return RetrieveFileFromBufferOrArchive(iCurrentDoublePage);
         }
+
+        public Byte[] RetrieveFileFromBufferOrArchive(int PageNum)
+        {
+            if(ArchiveFiles.ContainsKey(PageNum))
+                return ArchiveFiles[PageNum];
+
+            MemoryStream newfs = new MemoryStream();
+            SevenZipExtractor Extr = new SevenZipExtractor(fs);
+            Extr.ExtractFile(ArchiveSort[PageNum], newfs);
+            AddtoBuffer(PageNum, newfs.ToArray());
+
+            return newfs.ToArray();
+        }
+
+        public void AddtoBuffer(int PageNum, Byte[] bytes)
+        {
+            //I dont want to store More than 100 cached Pages at a time
+            if(ArchiveFiles.Count > 100)
+            {
+                ArchiveFiles.RemoveFromFront(ArchiveFiles.Count - 100);
+            }
+
+            ArchiveFiles.Add(PageNum, bytes);
+        }
+
 
         public bool CheckifSupported(string filename)
         {

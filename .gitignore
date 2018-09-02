@@ -7,3 +7,4 @@ AllNewComicReader/obj/*
 *.log
 /ComicThumbnailHandler/x64/
 /ComicThumbnailHandler/Win32/
+/bin/
